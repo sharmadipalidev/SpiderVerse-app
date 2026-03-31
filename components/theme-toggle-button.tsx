@@ -1,6 +1,6 @@
 import React from "react";
 import { Pressable, StyleSheet } from "react-native";
-import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAppTheme } from "../theme/AppThemeContext";
 
 type ThemeToggleButtonProps = {
@@ -30,10 +30,10 @@ const ThemeToggleButton = ({
           color={theme.text}
         />
       ) : iconVariant === "gwen-theme" ? (
-        <Feather
-          name={isDark ? "sun" : "moon"}
-          size={18}
-          color={isDark ? "#ffd166" : "#ff6eb8"}
+        <MaterialCommunityIcons
+          name="spider"
+          size={20}
+          color={isDark ? "#63d9ff" : "#ff5fa2"}
         />
       ) : (
         <Ionicons

@@ -35,7 +35,7 @@ function AppContent() {
     async function prepare() {
       try {
         await SplashScreen.hideAsync();
-        await new Promise((resolve) => setTimeout(resolve, 3000));
+        await new Promise((resolve) => setTimeout(resolve, 2000));
       } catch (e) {
         console.warn(e);
       } finally {

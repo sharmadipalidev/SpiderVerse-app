@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   ImageBackground,
   StyleSheet,
@@ -9,22 +10,14 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ThemeToggleButton from "../../components/theme-toggle-button";
+import { useAppTheme } from "../../theme/AppThemeContext";
 
 const GWEN_BACKGROUND_IMAGE = require("../../assets/gwen-background.jpg");
-const GWEN_COLORS = {
-  page: "#f6ebfb",
-  panelBorder: "#9b3672",
-  overlayBottom: "rgba(38, 12, 56, 0.72)",
-  eyebrow: "#d65397",
-  title: "#ffffff",
-  subtitle: "#efe7ff",
-  button: "#63d9ff",
-  buttonText: "#20163a",
-};
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
-  const styles = createStyles();
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top"]}>
@@ -36,26 +29,29 @@ const HomeScreen = () => {
           resizeMode="cover"
         >
           <View style={styles.heroOverlay}>
-            <View style={styles.heroTopRow}>
-              <View style={styles.heroTextWrap}>
-                <Text style={styles.eyebrow}>Welcome to Spider-Verse</Text>
-                <Text style={styles.title}>Ghost-Spider</Text>
-                <Text style={styles.subtitle}>
-                  "Hey, I'm Gwen Stacy from Earth-65"
-                </Text>
+            <View style={styles.topPanel}>
+              <View style={styles.heroTopRow}>
+                <View style={styles.heroTextWrap}>
+                  <Text style={styles.eyebrow}>Welcome to Spider-Verse</Text>
+                  <Text style={styles.title}>Ghost-Spider</Text>
+                  <Text style={styles.subHeading}>
+                    "Hey, I'm Gwen Stacy of Earth-65"
+                  </Text>
+                </View>
+                <ThemeToggleButton iconVariant="gwen-theme" />
               </View>
-              <ThemeToggleButton iconVariant="gwen-theme" />
             </View>
             <View style={styles.heroSpacer} />
-            <TouchableOpacity
-              style={styles.ctaButton}
-              onPress={() => navigation.navigate("HeroList")}
-              activeOpacity={0.85}
-            >
-              <Text style={styles.ctaButtonText}>
-                Meet All Spider-Verse Heroes
-              </Text>
-            </TouchableOpacity>
+            <View style={styles.bottomPanel}>
+              <TouchableOpacity
+                style={styles.ctaButton}
+                onPress={() => navigation.navigate("HeroList")}
+              >
+                <Text style={styles.ctaButtonText}>
+                  Meet All Spider-Verse Heroes
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </ImageBackground>
       </View>
@@ -65,11 +61,11 @@ const HomeScreen = () => {
 
 export default HomeScreen;
 
-const createStyles = () =>
+const createStyles = (theme: ReturnType<typeof useAppTheme>["theme"]) =>
   StyleSheet.create({
     safeArea: {
       flex: 1,
-      backgroundColor: GWEN_COLORS.page,
+      backgroundColor: theme.background,
     },
     container: {
       flex: 1,
@@ -84,59 +80,105 @@ const createStyles = () =>
     heroOverlay: {
       flex: 1,
       paddingHorizontal: 20,
-      paddingTop: 10,
-      paddingBottom: 10,
+      paddingTop: 6,
+      paddingBottom: 18,
       justifyContent: "space-between",
-      backgroundColor: GWEN_COLORS.overlayBottom,
+    },
+    topPanel: {
+      backgroundColor:
+        theme.mode === "dark"
+          ? "rgba(32,22,58,0.62)"
+          : "rgba(255,248,253,0.68)",
+      borderRadius: 28,
+      padding: 15,
+      borderWidth: 1,
+      borderColor: theme.mode === "dark" ? "#8467a0" : "#f7b7d8",
+      gap: 16,
     },
     heroTopRow: {
       flexDirection: "row",
       alignItems: "flex-start",
       justifyContent: "space-between",
-      paddingHorizontal: 14,
-      paddingVertical: 14,
-
-      borderRadius: 12,
-
-      // gap: 12,
+      gap: 12,
     },
     heroTextWrap: {
       flex: 1,
     },
     eyebrow: {
-      color: GWEN_COLORS.eyebrow,
-      fontSize: 14,
+      color: "#ff73b9",
+      fontSize: 12,
       fontWeight: "900",
       textTransform: "uppercase",
       letterSpacing: 1.1,
-      marginBottom: 5,
+      marginBottom: 4,
     },
     title: {
-      color: GWEN_COLORS.button,
-      fontSize: 28,
-      fontWeight: "800",
-      marginBottom: 3,
+      color: theme.mode === "dark" ? "#63d9ff" : "#ffffff",
+      fontSize: 31,
+      fontWeight: "900",
+      // marginBottom: 8,
     },
-    subtitle: {
-      color: GWEN_COLORS.subtitle,
+    subHeading: {
+      color: theme.mode === "dark" ? "#efe7ff" : "#20163a",
       fontSize: 14,
       lineHeight: 21,
+    },
+    infoRow: {
+      flexDirection: "row",
+      gap: 10,
+      flexWrap: "wrap",
+    },
+    infoChip: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 8,
+      backgroundColor: "#63d9ff",
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+      borderRadius: 999,
+    },
+    infoChipText: {
+      color: "#20163a",
+      fontSize: 13,
+      fontWeight: "800",
     },
     heroSpacer: {
       flex: 1,
     },
+    bottomPanel: {
+      backgroundColor:
+        theme.mode === "dark"
+          ? "rgba(20,15,34,0.72)"
+          : "rgba(255,248,253,0.84)",
+      borderRadius: 28,
+      padding: 1,
+      borderWidth: 1,
+      borderColor: theme.mode === "dark" ? "#4c3a5d" : "#efc8df",
+    },
+    bottomEyebrow: {
+      color: "#ff73b9",
+      fontSize: 12,
+      fontWeight: "900",
+      textTransform: "uppercase",
+      letterSpacing: 1.1,
+      marginBottom: 4,
+    },
+    bottomText: {
+      color: theme.mode === "dark" ? "#efe7ff" : "#584b68",
+      fontSize: 14,
+      // lineHeight: 12,
+      marginBottom: 1,
+    },
     ctaButton: {
-      backgroundColor: GWEN_COLORS.button,
+      backgroundColor: "#63d9ff",
       borderRadius: 25,
-      opacity: 0.9,
-      color: GWEN_COLORS.title,
-      paddingVertical: 8,
-      paddingHorizontal: 13,
+      paddingVertical: 12,
+      paddingHorizontal: 16,
       alignItems: "center",
     },
     ctaButtonText: {
-      color: GWEN_COLORS.buttonText,
+      color: "#20163a",
       fontSize: 15,
-      fontWeight: "800",
+      fontWeight: "900",
     },
   });

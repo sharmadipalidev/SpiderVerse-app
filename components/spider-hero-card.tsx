@@ -59,6 +59,11 @@ const createStyles = (theme: ReturnType<typeof useAppTheme>["theme"]) =>
       overflow: "hidden",
       borderWidth: 1,
       borderColor: theme.border,
+      shadowColor: "#20163a",
+      shadowOpacity: theme.mode === "dark" ? 0 : 0.08,
+      shadowRadius: 14,
+      shadowOffset: { width: 0, height: 6 },
+      elevation: 3,
     },
     image: {
       width: "100%",
@@ -90,7 +95,7 @@ const createStyles = (theme: ReturnType<typeof useAppTheme>["theme"]) =>
     subtitle: {
       color: theme.primary,
       fontSize: 14,
-      fontWeight: "600",
+      fontWeight: "700",
       marginBottom: 10,
     },
     meta: {

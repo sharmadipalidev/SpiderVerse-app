@@ -33,10 +33,9 @@ const PokemonListScreen = () => {
           <View style={styles.topRow}>
             <View style={styles.textWrap}>
               <Text style={styles.eyebrow}>Spider Squad</Text>
-
-              <Text style={styles.description}>Super Hero of multiverse</Text>
+              <Text style={styles.title}>Friends</Text>
             </View>
-            <ThemeToggleButton />
+            <ThemeToggleButton iconVariant="gwen-theme" />
           </View>
         </View>
 
@@ -68,11 +67,11 @@ const createStyles = (theme: ReturnType<typeof useAppTheme>["theme"]) =>
       gap: 18,
     },
     banner: {
-      backgroundColor: theme.secondarySoft,
+      backgroundColor: theme.mode === "dark" ? "#221738" : "#20163a",
       borderRadius: 24,
-      padding: 22,
+      padding: 15,
       borderWidth: 1,
-      borderColor: theme.secondaryBorder,
+      borderColor: theme.mode === "dark" ? "#8467a0" : "#74528e",
     },
     topRow: {
       flexDirection: "row",
@@ -83,24 +82,19 @@ const createStyles = (theme: ReturnType<typeof useAppTheme>["theme"]) =>
       flex: 1,
     },
     eyebrow: {
-      color: theme.mode === "dark" ? "#dbeafe" : "#1e3a8a",
-      fontSize: 13,
-      fontWeight: "700",
+      color: "#ff73b9",
+      fontSize: 12,
+      fontWeight: "800",
       textTransform: "uppercase",
-      letterSpacing: 1,
-      marginBottom: 8,
+      letterSpacing: 1.1,
+      marginBottom: 5,
     },
     title: {
-      color: theme.text,
-      fontSize: 30,
-      fontWeight: "800",
-      marginBottom: 10,
+      color: "#ffffff",
+      fontSize: 25,
+      fontWeight: "900",
     },
-    description: {
-      color: theme.mutedText,
-      fontSize: 15,
-      lineHeight: 22,
-    },
+
     listContent: {
       gap: 14,
       paddingBottom: 20,

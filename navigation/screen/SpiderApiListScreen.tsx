@@ -15,6 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { getSpiderHeroes } from "../../api/spiderApi";
 import SpiderHeroCard from "../../components/spider-hero-card";
 import ThemeToggleButton from "../../components/theme-toggle-button";
+import { useAppTheme } from "../../theme/AppThemeContext";
 import type { SpiderHero } from "../../types/types";
 
 const GWEN_COLORS = {
@@ -33,12 +34,13 @@ const GWEN_COLORS = {
 };
 
 const SpiderApiListScreen = () => {
+  const { theme } = useAppTheme();
   const navigation = useNavigation<any>();
   const [heroes, setHeroes] = useState<SpiderHero[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const styles = createStyles();
+  const styles = createStyles(theme);
 
   const loadHeroes = async () => {
     try {
@@ -95,16 +97,17 @@ const SpiderApiListScreen = () => {
             style={styles.backButton}
             activeOpacity={0.85}
           >
-            <Ionicons name="arrow-back" size={22} color={GWEN_COLORS.title} />
+            <Ionicons name="arrow-back" size={22} color={styles.backIcon.color} />
           </TouchableOpacity>
-          <ThemeToggleButton />
+          <ThemeToggleButton iconVariant="gwen-theme" />
         </View>
 
         <View style={styles.banner}>
-          <Text style={styles.eyebrow}>Spider-Verse API</Text>
-          <Text style={styles.title}>All Hero Cards</Text>
+          <Text style={styles.eyebrow}>Spider-Verse</Text>
+          <Text style={styles.title}>All Heroes Assemble</Text>
           <Text style={styles.subtitle}>
-            Browse every hero from the API in one dedicated screen.
+            Search across identities, Earths, powers, and aliases in one
+            cleaner explorer view.
           </Text>
         </View>
 
@@ -112,14 +115,16 @@ const SpiderApiListScreen = () => {
           value={searchText}
           onChangeText={setSearchText}
           placeholder="Search heroes, earths, or abilities"
-          placeholderTextColor={GWEN_COLORS.subtitle}
+          placeholderTextColor={styles.searchPlaceholder.color}
           style={styles.searchInput}
         />
 
         {loading ? (
           <View style={styles.loaderWrap}>
-            <ActivityIndicator size="large" color={GWEN_COLORS.loader} />
-            <Text style={styles.loaderText}>Loading Spider-Verse heroes...</Text>
+            <ActivityIndicator size="large" color={styles.loader.color} />
+            <Text style={styles.loaderText}>
+              Loading Spider-Verse heroes...
+            </Text>
           </View>
         ) : (
           <FlatList
@@ -137,7 +142,7 @@ const SpiderApiListScreen = () => {
                   setRefreshing(true);
                   loadHeroes();
                 }}
-                tintColor={GWEN_COLORS.loader}
+                tintColor={styles.loader.color}
               />
             }
             ListEmptyComponent={
@@ -157,11 +162,29 @@ const SpiderApiListScreen = () => {
 
 export default SpiderApiListScreen;
 
-const createStyles = () =>
-  StyleSheet.create({
+const createStyles = (theme: ReturnType<typeof useAppTheme>["theme"]) => {
+  const palette =
+    theme.mode === "dark"
+      ? {
+          page: "#140f22",
+          panel: "#221738",
+          panelBorder: "#8467a0",
+          eyebrow: "#ff73b9",
+          title: "#f7f1ff",
+          subtitle: "#d4c8e8",
+          surface: "#1e1729",
+          surfaceBorder: "#4c3a5d",
+          input: "#1c1528",
+          inputBorder: "#4f3e63",
+          button: "#63d9ff",
+          loader: "#63d9ff",
+        }
+      : GWEN_COLORS;
+
+  return StyleSheet.create({
     safeArea: {
       flex: 1,
-      backgroundColor: GWEN_COLORS.page,
+      backgroundColor: palette.page,
     },
     container: {
       flex: 1,
@@ -178,22 +201,25 @@ const createStyles = () =>
       width: 44,
       height: 44,
       borderRadius: 22,
-      backgroundColor: GWEN_COLORS.surface,
+      backgroundColor: palette.surface,
       borderWidth: 1,
-      borderColor: GWEN_COLORS.surfaceBorder,
+      borderColor: palette.surfaceBorder,
       alignItems: "center",
       justifyContent: "center",
+    },
+    backIcon: {
+      color: palette.title,
     },
     banner: {
       marginBottom: 14,
       padding: 20,
       borderRadius: 24,
-      backgroundColor: GWEN_COLORS.panel,
+      backgroundColor: palette.panel,
       borderWidth: 1,
-      borderColor: GWEN_COLORS.panelBorder,
+      borderColor: palette.panelBorder,
     },
     eyebrow: {
-      color: GWEN_COLORS.eyebrow,
+      color: palette.eyebrow,
       fontSize: 12,
       fontWeight: "800",
       textTransform: "uppercase",
@@ -201,21 +227,24 @@ const createStyles = () =>
       marginBottom: 8,
     },
     title: {
-      color: GWEN_COLORS.title,
+      color: palette.title,
       fontSize: 28,
       fontWeight: "800",
       marginBottom: 8,
     },
     subtitle: {
-      color: GWEN_COLORS.subtitle,
+      color: palette.subtitle,
       fontSize: 14,
       lineHeight: 21,
     },
+    searchPlaceholder: {
+      color: palette.subtitle,
+    },
     searchInput: {
-      backgroundColor: GWEN_COLORS.input,
-      borderColor: GWEN_COLORS.inputBorder,
+      backgroundColor: palette.input,
+      borderColor: palette.inputBorder,
       borderWidth: 1,
-      color: GWEN_COLORS.title,
+      color: palette.title,
       borderRadius: 16,
       paddingHorizontal: 16,
       paddingVertical: 14,
@@ -232,27 +261,31 @@ const createStyles = () =>
       alignItems: "center",
       gap: 10,
     },
+    loader: {
+      color: palette.loader,
+    },
     loaderText: {
-      color: GWEN_COLORS.subtitle,
+      color: palette.subtitle,
       fontSize: 14,
     },
     emptyState: {
       padding: 24,
       borderRadius: 20,
-      backgroundColor: GWEN_COLORS.surface,
+      backgroundColor: palette.surface,
       borderWidth: 1,
-      borderColor: GWEN_COLORS.surfaceBorder,
+      borderColor: palette.surfaceBorder,
       alignItems: "center",
     },
     emptyTitle: {
-      color: GWEN_COLORS.title,
+      color: palette.title,
       fontSize: 18,
       fontWeight: "800",
       marginBottom: 6,
     },
     emptyText: {
-      color: GWEN_COLORS.subtitle,
+      color: palette.subtitle,
       textAlign: "center",
       lineHeight: 20,
     },
   });
+};

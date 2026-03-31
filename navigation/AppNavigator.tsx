@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import HomeScreen from "./screen/HomeScreen";
 import PokemonListScreen from "./screen/SpiderListScreen";
-import PokemonDetailScreen from "./screen/SpiderDetailScreen";
+import PokemonDetailScreen from "./screen/SpiderSongScreen";
 import SpiderHQScreen from "./screen/SpiderHQScreen";
 import { useAppTheme } from "../theme/AppThemeContext";
 import SpiderCharacterScreen from "./screen/SpiderCharacterScreen";
@@ -14,12 +14,20 @@ const Stack = createNativeStackNavigator();
 
 const TabsNavigator = () => {
   const { theme } = useAppTheme();
-  const gwenTabColors = {
-    background: "#1f1638",
-    border: "#6f4a86",
-    active: "#63d9ff",
-    inactive: "#f3c7e4",
-  };
+  const gwenTabColors =
+    theme.mode === "dark"
+      ? {
+          background: "#1f1638",
+          border: "#6f4a86",
+          active: "#63d9ff",
+          inactive: "#f3c7e4",
+        }
+      : {
+          background: "#fff7fc",
+          border: "#efc8df",
+          active: "#ff5fa2",
+          inactive: "#7a6a8d",
+        };
 
   return (
     <Tab.Navigator
@@ -32,6 +40,11 @@ const TabsNavigator = () => {
           paddingTop: 6,
           paddingBottom: 8,
           height: 66,
+          shadowColor: "#20163a",
+          shadowOpacity: theme.mode === "dark" ? 0 : 0.08,
+          shadowRadius: 10,
+          shadowOffset: { width: 0, height: -4 },
+          elevation: 10,
         },
         tabBarActiveTintColor: gwenTabColors.active,
         tabBarInactiveTintColor: gwenTabColors.inactive,

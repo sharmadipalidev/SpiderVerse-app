@@ -56,10 +56,13 @@ const SpiderCharacterScreen = () => {
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.topBar}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.backButton}
+          >
             <Ionicons name="arrow-back" size={22} color={theme.text} />
           </TouchableOpacity>
-          <ThemeToggleButton />
+          <ThemeToggleButton iconVariant="gwen-theme" />
         </View>
 
         <View style={styles.heroCard}>
@@ -73,14 +76,29 @@ const SpiderCharacterScreen = () => {
           />
 
           <View style={styles.heroBody}>
-            <Text style={styles.eyebrow}>{hero.earth || hero.universe || "Spider-Verse"}</Text>
+            <Text style={styles.eyebrow}>
+              {hero.earth || hero.universe || "Spider-Verse"}
+            </Text>
             <Text style={styles.title}>{hero.name}</Text>
             <Text style={styles.subtitle}>
               {hero.fullName || hero.identity || "Spider hero profile"}
             </Text>
             <Text style={styles.description}>
-              {hero.description || "No description available for this character yet."}
+              {hero.description ||
+                "No description available for this character yet."}
             </Text>
+            <View style={styles.heroBadgeRow}>
+              <View style={styles.heroBadge}>
+                <Text style={styles.heroBadgeText}>
+                  {hero.status || "Active"}
+                </Text>
+              </View>
+              <View style={styles.heroBadgeAlt}>
+                <Text style={styles.heroBadgeAltText}>
+                  {hero.species || "Spider Hero"}
+                </Text>
+              </View>
+            </View>
           </View>
         </View>
 
@@ -125,9 +143,9 @@ const createStyles = (theme: ReturnType<typeof useAppTheme>["theme"]) =>
       backgroundColor: theme.background,
     },
     content: {
-      padding: 16,
+      padding: 18,
       paddingBottom: 28,
-      gap: 16,
+      gap: 18,
     },
     topBar: {
       flexDirection: "row",
@@ -146,10 +164,15 @@ const createStyles = (theme: ReturnType<typeof useAppTheme>["theme"]) =>
     },
     heroCard: {
       backgroundColor: theme.surface,
-      borderRadius: 24,
+      borderRadius: 28,
       overflow: "hidden",
       borderWidth: 1,
       borderColor: theme.border,
+      shadowColor: "#20163a",
+      shadowOpacity: theme.mode === "dark" ? 0 : 0.08,
+      shadowRadius: 14,
+      shadowOffset: { width: 0, height: 6 },
+      elevation: 3,
     },
     heroImage: {
       width: "100%",
@@ -183,13 +206,49 @@ const createStyles = (theme: ReturnType<typeof useAppTheme>["theme"]) =>
       fontSize: 14,
       lineHeight: 22,
     },
+    heroBadgeRow: {
+      flexDirection: "row",
+      gap: 10,
+      flexWrap: "wrap",
+      marginTop: 14,
+    },
+    heroBadge: {
+      backgroundColor: theme.primary,
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+      borderRadius: 999,
+    },
+    heroBadgeText: {
+      color: theme.mode === "dark" ? "#20163a" : "#ffffff",
+      fontSize: 12,
+      fontWeight: "800",
+      textTransform: "uppercase",
+    },
+    heroBadgeAlt: {
+      backgroundColor: theme.secondarySoft,
+      borderColor: theme.secondaryBorder,
+      borderWidth: 1,
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+      borderRadius: 999,
+    },
+    heroBadgeAltText: {
+      color: theme.mode === "dark" ? "#f7f1ff" : "#20163a",
+      fontSize: 12,
+      fontWeight: "800",
+    },
     section: {
       backgroundColor: theme.surface,
-      borderRadius: 20,
+      borderRadius: 22,
       padding: 18,
       borderWidth: 1,
       borderColor: theme.border,
       gap: 10,
+      shadowColor: "#20163a",
+      shadowOpacity: theme.mode === "dark" ? 0 : 0.05,
+      shadowRadius: 12,
+      shadowOffset: { width: 0, height: 5 },
+      elevation: 2,
     },
     sectionTitle: {
       color: theme.text,
