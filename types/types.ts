@@ -41,3 +41,8 @@ export type SpiderApiResponse = {
   total: number;
   characters: SpiderHeroRecord[];
 };
+
+export type RootStackParamList = {
+  Tabs: undefined;
+  CharacterDetail: { hero: SpiderHero };
+};

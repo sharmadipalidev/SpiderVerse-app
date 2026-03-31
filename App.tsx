@@ -6,11 +6,12 @@ import AppNavigator from "./navigation/AppNavigator";
 import * as SplashScreen from "expo-splash-screen";
 import { Image } from "react-native";
 import { useEffect, useState } from "react";
+import { AppThemeProvider, useAppTheme } from "./theme/AppThemeContext";
 
 SplashScreen.preventAutoHideAsync();
 
 const SPLASH_IMAGE = {
-  uri: "https://i.pinimg.com/736x/62/0c/5b/620c5b2cd89fe0564a4ec158e45ef7e8.jpg",
+  uri: "https://i.pinimg.com/1200x/05/20/8a/05208a3424d905db3821e938a550c646.jpg",
 };
 
 function CustomSplash() {
@@ -26,12 +27,14 @@ function CustomSplash() {
   );
 }
 
-export default function App() {
+function AppContent() {
   const [isReady, setIsReady] = useState(false);
+  const { theme } = useAppTheme();
 
   useEffect(() => {
     async function prepare() {
       try {
+        await SplashScreen.hideAsync();
         await new Promise((resolve) => setTimeout(resolve, 3000));
       } catch (e) {
         console.warn(e);
@@ -42,25 +45,27 @@ export default function App() {
     prepare();
   }, []);
 
-  useEffect(() => {
-    if (isReady) {
-      SplashScreen.hideAsync();
-    }
-  }, [isReady]);
-
   if (!isReady) {
     return <CustomSplash />;
   }
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
-        <View style={styles.container}>
+      <NavigationContainer theme={theme.navigationTheme}>
+        <View style={[styles.container, { backgroundColor: theme.background }]}>
           <AppNavigator />
-          <StatusBar style="light" />
+          <StatusBar style={theme.statusBar} />
         </View>
       </NavigationContainer>
     </SafeAreaProvider>
+  );
+}
+
+export default function App() {
+  return (
+    <AppThemeProvider>
+      <AppContent />
+    </AppThemeProvider>
   );
 }
 
