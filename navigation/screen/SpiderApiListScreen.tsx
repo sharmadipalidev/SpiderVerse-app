@@ -97,18 +97,18 @@ const SpiderApiListScreen = () => {
             style={styles.backButton}
             activeOpacity={0.85}
           >
-            <Ionicons name="arrow-back" size={22} color={styles.backIcon.color} />
+            <Ionicons
+              name="arrow-back"
+              size={22}
+              color={styles.backIcon.color}
+            />
           </TouchableOpacity>
           <ThemeToggleButton iconVariant="gwen-theme" />
         </View>
 
         <View style={styles.banner}>
           <Text style={styles.eyebrow}>Spider-Verse</Text>
-          <Text style={styles.title}>All Heroes Assemble</Text>
-          <Text style={styles.subtitle}>
-            Search across identities, Earths, powers, and aliases in one
-            cleaner explorer view.
-          </Text>
+          <Text style={styles.title}>MultiVerse of Spiders</Text>
         </View>
 
         <TextInput
@@ -224,13 +224,12 @@ const createStyles = (theme: ReturnType<typeof useAppTheme>["theme"]) => {
       fontWeight: "800",
       textTransform: "uppercase",
       letterSpacing: 1.1,
-      marginBottom: 8,
+      marginBottom: 1,
     },
     title: {
       color: palette.title,
-      fontSize: 28,
+      fontSize: 25,
       fontWeight: "800",
-      marginBottom: 8,
     },
     subtitle: {
       color: palette.subtitle,

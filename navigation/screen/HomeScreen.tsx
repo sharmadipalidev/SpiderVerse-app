@@ -114,9 +114,10 @@ const createStyles = (theme: ReturnType<typeof useAppTheme>["theme"]) =>
     },
     title: {
       color: theme.mode === "dark" ? "#63d9ff" : "#ffffff",
-      fontSize: 31,
+      fontSize: 30,
       fontWeight: "900",
       // marginBottom: 8,
+      fontFamily: "RockeBrush",
     },
     subHeading: {
       color: theme.mode === "dark" ? "#efe7ff" : "#20163a",

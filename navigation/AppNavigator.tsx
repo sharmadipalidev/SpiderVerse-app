@@ -2,8 +2,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import HomeScreen from "./screen/HomeScreen";
-import PokemonListScreen from "./screen/SpiderListScreen";
-import PokemonDetailScreen from "./screen/SpiderSongScreen";
+import SpiderListScreen from "./screen/SpiderListScreen";
+import SpiderDetailScreen from "./screen/SpiderSongScreen";
 import SpiderHQScreen from "./screen/SpiderHQScreen";
 import { useAppTheme } from "../theme/AppThemeContext";
 import SpiderCharacterScreen from "./screen/SpiderCharacterScreen";
@@ -94,8 +94,8 @@ const TabsNavigator = () => {
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Friends" component={PokemonListScreen} />
-      <Tab.Screen name="Songs" component={PokemonDetailScreen} />
+      <Tab.Screen name="Friends" component={SpiderListScreen} />
+      <Tab.Screen name="Songs" component={SpiderDetailScreen} />
       <Tab.Screen name="HQ" component={SpiderHQScreen} />
     </Tab.Navigator>
   );

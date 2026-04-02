@@ -91,59 +91,81 @@ const SongsScreen = () => {
   const styles = createStyles(theme);
 
   const [activeSongIndex, setActiveSongIndex] = React.useState(0);
-  const autoPlayRef = React.useRef(false);
+
+  const shouldAutoPlayRef = React.useRef(false);
+
   const activeSong = SPIDER_SONGS[activeSongIndex];
 
-  const player = useAudioPlayer(activeSong.source, 500);
+  const player = useAudioPlayer(activeSong.source);
   const status = useAudioPlayerStatus(player);
 
   React.useEffect(() => {
-    void setAudioModeAsync({
-      playsInSilentModeIOS: true,
-      shouldPlayInBackground: false,
-    });
+    const setupAudio = async () => {
+      try {
+        await setAudioModeAsync({
+          playsInSilentMode: true,
+          allowsRecording: false,
+          shouldPlayInBackground: false,
+        });
+      } catch (e) {
+        console.warn("setAudioModeAsync error:", e);
+      }
+    };
+    void setupAudio();
   }, []);
 
   React.useEffect(() => {
-    if (autoPlayRef.current) {
+    if (status.isLoaded && !status.isBuffering && shouldAutoPlayRef.current) {
+      shouldAutoPlayRef.current = false;
       player.play();
-      autoPlayRef.current = false;
     }
+  }, [status.isLoaded, status.isBuffering, player]);
+
+  React.useEffect(() => {
     return () => {
       player.remove();
     };
-  }, [player]);
+  }, []);
 
   React.useEffect(() => {
     if (status.didJustFinish) {
-      autoPlayRef.current = true;
+      shouldAutoPlayRef.current = true;
       setActiveSongIndex((prev) => (prev + 1) % SPIDER_SONGS.length);
     }
   }, [status.didJustFinish]);
 
   const selectSong = (index: number) => {
     if (index === activeSongIndex) {
-      status.playing ? player.pause() : player.play();
+      if (status.playing) {
+        player.pause();
+      } else {
+        player.play();
+      }
       return;
     }
-    autoPlayRef.current = true;
+
+    shouldAutoPlayRef.current = true;
     setActiveSongIndex(index);
   };
 
   const goToPreviousSong = () => {
-    autoPlayRef.current = true;
+    shouldAutoPlayRef.current = true;
     setActiveSongIndex(
       (prev) => (prev - 1 + SPIDER_SONGS.length) % SPIDER_SONGS.length,
     );
   };
 
   const goToNextSong = () => {
-    autoPlayRef.current = true;
+    shouldAutoPlayRef.current = true;
     setActiveSongIndex((prev) => (prev + 1) % SPIDER_SONGS.length);
   };
 
   const togglePlayback = () => {
-    status.playing ? player.pause() : player.play();
+    if (status.playing) {
+      player.pause();
+    } else {
+      player.play();
+    }
   };
 
   const seekBackward5 = () => {
@@ -161,6 +183,7 @@ const SongsScreen = () => {
   const durationSec = status.duration ?? 0;
   const progressPercent =
     durationSec > 0 ? (currentTimeSec / durationSec) * 100 : 0;
+
   const isLoading = !status.isLoaded || status.isBuffering;
 
   const iconColor = isDark ? "#e0d4ff" : "#20163a";
@@ -177,7 +200,7 @@ const SongsScreen = () => {
             <View style={styles.banner}>
               <View style={styles.topRow}>
                 <View style={styles.textWrap}>
-                  <Text style={styles.eyebrow}>Spider-Man Sountracks</Text>
+                  <Text style={styles.eyebrow}>Spider-Man Soundtracks</Text>
                   <Text style={styles.title}>Songs</Text>
                 </View>
                 <ThemeToggleButton iconVariant="gwen-theme" />
@@ -199,6 +222,7 @@ const SongsScreen = () => {
               </View>
             </View>
 
+            
             <View style={styles.playerCard}>
               <View style={styles.playerTopRow}>
                 <View style={styles.playerTextWrap}>
@@ -224,12 +248,13 @@ const SongsScreen = () => {
                 </View>
               </View>
 
+             
               <View style={styles.progressTrack}>
                 <View
                   style={[
                     styles.progressFill,
                     {
-                      width: `${progressPercent}%` as const,
+                      width: `${progressPercent}%` as any,
                       backgroundColor: activeSong.accent,
                     },
                   ]}
@@ -243,6 +268,7 @@ const SongsScreen = () => {
                 <Text style={styles.timeText}>{formatTime(durationSec)}</Text>
               </View>
 
+              
               <View style={styles.controlsRow}>
                 <Pressable
                   style={styles.iconControl}
@@ -261,6 +287,7 @@ const SongsScreen = () => {
                     { backgroundColor: activeSong.accent },
                   ]}
                   onPress={togglePlayback}
+                  disabled={isLoading}
                 >
                   {isLoading ? (
                     <MaterialCommunityIcons
@@ -351,7 +378,9 @@ const SongsScreen = () => {
                     {isActive
                       ? status.playing
                         ? "▶ Playing now"
-                        : "⏸ Paused"
+                        : isLoading
+                          ? "⏳ Loading..."
+                          : "⏸ Paused"
                       : "Tap to play"}
                   </Text>
                   <Text style={[styles.songMovie, { color: movieColor }]}>
@@ -406,7 +435,7 @@ const createStyles = (theme: ReturnType<typeof useAppTheme>["theme"]) => {
       backgroundColor: isDark ? "#0e0a1a" : "#f4edf8",
     },
     listContent: {
-      padding: 20,
+      padding: 18,
       paddingBottom: 36,
       gap: 12,
     },
@@ -415,7 +444,7 @@ const createStyles = (theme: ReturnType<typeof useAppTheme>["theme"]) => {
     banner: {
       backgroundColor: isDark ? "#1a1030" : "#20163a",
       borderRadius: 28,
-      padding: 22,
+      padding: 20,
       borderWidth: 1,
       borderColor: isDark ? "#6a4e8a" : "#5e3f78",
     },
@@ -432,18 +461,17 @@ const createStyles = (theme: ReturnType<typeof useAppTheme>["theme"]) => {
       fontWeight: "800",
       textTransform: "uppercase",
       letterSpacing: 1.1,
-      marginBottom: 8,
+      marginBottom: 1,
     },
     title: {
       color: "#ffffff",
-      fontSize: 25,
+      fontSize: 23,
       fontWeight: "900",
-      marginBottom: 4,
     },
     highlightRow: {
       flexDirection: "row",
       gap: 10,
-      marginTop: 18,
+      marginTop: 12,
       flexWrap: "wrap",
     },
     highlightChip: {

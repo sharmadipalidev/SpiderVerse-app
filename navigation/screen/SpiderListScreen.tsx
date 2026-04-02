@@ -8,7 +8,7 @@ import { getSpiderHeroes } from "../../api/spiderApi";
 import type { SpiderHero } from "../../types/types";
 import SpiderHeroCard from "../../components/spider-hero-card";
 
-const PokemonListScreen = () => {
+const SpiderListScreen = () => {
   const navigation = useNavigation<any>();
   const { theme } = useAppTheme();
   const styles = createStyles(theme);
@@ -53,7 +53,7 @@ const PokemonListScreen = () => {
   );
 };
 
-export default PokemonListScreen;
+export default SpiderListScreen;
 
 const createStyles = (theme: ReturnType<typeof useAppTheme>["theme"]) =>
   StyleSheet.create({
@@ -91,7 +91,7 @@ const createStyles = (theme: ReturnType<typeof useAppTheme>["theme"]) =>
     },
     title: {
       color: "#ffffff",
-      fontSize: 25,
+      fontSize: 24,
       fontWeight: "900",
     },
 

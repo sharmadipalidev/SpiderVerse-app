@@ -5,6 +5,23 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import ThemeToggleButton from "../../components/theme-toggle-button";
 import { useAppTheme } from "../../theme/AppThemeContext";
 
+type VillainStatus = {
+  id: string;
+  name: string;
+  earth: string;
+  realName: string;
+  threatLevel: string;
+  status: string;
+  lastSeen: string;
+  accent: string;
+  icon: keyof typeof MaterialCommunityIcons.glyphMap;
+  bannerImage: string;
+  portraitImage: string;
+  statusTag: string;
+  abilities: string[];
+  description: string;
+  crossEarthSightings: { earth: string; status: string; accent: string }[];
+};
 type EarthStatus = {
   id: string;
   earth: string;
@@ -20,6 +37,318 @@ type EarthStatus = {
   missionPoints: string[];
   missionTag: string;
 };
+
+const VILLAIN_DATA: VillainStatus[] = [
+  {
+    id: "v1",
+    name: "Green Goblin",
+    earth: "Earth-96283",
+    realName: "Norman Osborn",
+    threatLevel: "CRITICAL",
+    status: "At Large",
+    lastSeen: "Earth-616 Statue of Liberty — 2d ago",
+    accent: "#84cc16",
+    icon: "ghost-outline",
+    bannerImage: "https://cdn.marvel.com/content/2x/104gno_com_mas_mob_03.jpg",
+    portraitImage:
+      "https://d3lzcn6mbbadaf.cloudfront.net/media/details/ANI-20230319043828.jpg",
+    statusTag: "Fractured Psyche",
+    description:
+      "Norman Osborn injected himself with an unstable Goblin Formula that split his mind into two warring identities. Armed with a razor glider, pumpkin bombs and military-grade reflexes, he has caused irreversible personal loss to Peter Parker across multiple universes. The most psychologically dangerous villain on record.",
+    abilities: [
+      "Goblin Formula Strength",
+      "Razor Glider Combat",
+      "Pumpkin Bomb Arsenal",
+      "Tactical Genius",
+      "Split Personality Unpredictability",
+    ],
+    crossEarthSightings: [
+      { earth: "Earth-96283", status: "Origin", accent: "#84cc16" },
+      { earth: "Earth-616", status: "Incursion — Active", accent: "#ef4444" },
+      {
+        earth: "Earth-199999",
+        status: "Confirmed Sighting",
+        accent: "#f97316",
+      },
+    ],
+  },
+  {
+    id: "v2",
+    name: "Doctor Octopus",
+    earth: "Earth-96283",
+    realName: "Dr. Otto Octavius",
+    threatLevel: "HIGH",
+    status: "Contained",
+    lastSeen: "Spider-Society Holding — Bay 2",
+    accent: "#f97316",
+    icon: "spider-web",
+    bannerImage:
+      "https://cdn.mos.cms.futurecdn.net/v2/t:0,l:67,cw:1066,ch:600,q:80,w:1066/yKLoEe4uYY4LV7HDyDHxpi.jpg",
+    portraitImage:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5hqHCOxG_6Y_absgwY5NgFSrnsrfcPaEr0w&s",
+    statusTag: "Detained",
+    description:
+      "A brilliant nuclear physicist whose neural inhibitor chip shattered, letting his four adamantium arms take over his mind. Octavius pursued a fusion reactor dream willing to sink Manhattan into the ocean to prove himself right. Detained after interdimensional retrieval and partial neural restoration by Parker.",
+    abilities: [
+      "4 Adamantium Tentacle Arms",
+      "Multi-Point Simultaneous Combat",
+      "Nuclear Engineering Genius",
+      "Enhanced Reach & Crushing Grip",
+      "Neural Interface Override",
+    ],
+    crossEarthSightings: [
+      { earth: "Earth-96283", status: "Origin", accent: "#f97316" },
+      { earth: "Earth-616", status: "Detained", accent: "#22c55e" },
+      { earth: "Earth-199999", status: "Transferred", accent: "#6b7280" },
+    ],
+  },
+  {
+    id: "v3",
+    name: "Venom",
+    earth: "Earth-TRN700",
+    realName: "Eddie Brock",
+    threatLevel: "CRITICAL",
+    status: "Active",
+    lastSeen: "Earth-616 San Francisco — 6h ago",
+    accent: "#a855f7",
+    icon: "alien-outline",
+    bannerImage:
+      "https://w0.peakpx.com/wallpaper/151/636/HD-wallpaper-comics-venom-marvel-comics-spider-man.jpg",
+    portraitImage:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0Ei5rnyjwH65mns0D0Mv_iaYaiMHUIdCnAA&s",
+    statusTag: "Symbiote Roaming",
+    description:
+      "The Klyntar symbiote bonded with disgraced journalist Eddie Brock, creating a lethal apex predator immune to Spider-Man's Spider-Sense. Venom oscillates between chaotic vigilante and all-consuming monster. A residual symbiote droplet left on Earth-616 poses active dimensional contamination risk.",
+    abilities: [
+      "Symbiote Bonding & Shapeshifting",
+      "Spider-Sense Immunity",
+      "Tendril Whip Combat",
+      "Organic Wall-Crawling",
+      "Accelerated Regeneration",
+    ],
+    crossEarthSightings: [
+      { earth: "Earth-TRN700", status: "Origin", accent: "#a855f7" },
+      { earth: "Earth-616", status: "Symbiote Residue", accent: "#ef4444" },
+      { earth: "Earth-1610", status: "Trace Signal", accent: "#facc15" },
+      { earth: "Earth-96283", status: "Variant Deceased", accent: "#6b7280" },
+    ],
+  },
+  {
+    id: "v4",
+    name: "Electro",
+    earth: "Earth-120703",
+    realName: "Max Dillon",
+    threatLevel: "HIGH",
+    status: "Neutralised",
+    lastSeen: "Earth-616 Statue of Liberty — 3d ago",
+    accent: "#facc15",
+    icon: "lightning-bolt-circle",
+    bannerImage:
+      "https://static0.cbrimages.com/wordpress/wp-content/uploads/2018/09/Electro-in-The-Amazing-Spider-Man-2.jpg?w=1200&h=900&fit=crop",
+    portraitImage:
+      "https://www.looper.com/img/gallery/the-untold-truth-of-marvels-electro/l-intro-1602803028.jpg",
+    statusTag: "Power Drained",
+    description:
+      "Max Dillon fell into a tank of genetically altered electric eels at Oscorp and emerged as a living power plant. His craving for recognition morphed into a mission to drain the entire city grid. Neutralised when three Spider-Men combined their suit tech to overload his bioelectric field at the Statue of Liberty.",
+    abilities: [
+      "Pure Electrokinesis",
+      "City Grid Absorption",
+      "High-Voltage Plasma Blasts",
+      "Bio-Electric Flight",
+      "EM Field Disruption",
+    ],
+    crossEarthSightings: [
+      { earth: "Earth-120703", status: "Origin", accent: "#facc15" },
+      { earth: "Earth-616", status: "Neutralised", accent: "#3b82f6" },
+      { earth: "Earth-50101", status: "Variant Active", accent: "#f97316" },
+    ],
+  },
+  {
+    id: "v5",
+    name: "The Lizard",
+    earth: "Earth-120703",
+    realName: "Dr. Curt Connors",
+    threatLevel: "HIGH",
+    status: "Monitoring",
+    lastSeen: "Midtown High Science Lab — 5d ago",
+    accent: "#22c55e",
+    icon: "snake",
+    bannerImage:
+      "https://www.themarysue.com/wp-content/uploads/2011/07/Spider-Man-4-The-Lizard.jpg",
+    portraitImage:
+      "https://d2thvodm3xyo6j.cloudfront.net/media/2016/04/d1ee453ad952-600x338.jpg",
+    statusTag: "Serum Unstable",
+    description:
+      "One-armed herpetologist Dr. Curt Connors developed a cross-species reptile serum to regrow his limb. It worked — then it consumed him. The Lizard operates on pure primal instinct, attempting to trigger mass mutation across the city's water supply. Connors resurfaces intermittently but the serum's grip strengthens each cycle.",
+    abilities: [
+      "Reptile Limb Regeneration",
+      "Sewer & Tunnel Mastery",
+      "Superhuman Strength & Speed",
+      "Toxic Scratch Venom",
+      "Cross-Species Mutation Gas",
+    ],
+    crossEarthSightings: [
+      { earth: "Earth-120703", status: "Origin", accent: "#22c55e" },
+      { earth: "Earth-616", status: "Monitored", accent: "#facc15" },
+      { earth: "Earth-96283", status: "Variant Sighted", accent: "#f97316" },
+    ],
+  },
+  {
+    id: "v6",
+    name: "Sandman",
+    earth: "Earth-96283",
+    realName: "Flint Marko",
+    threatLevel: "MEDIUM",
+    status: "Unstable",
+    lastSeen: "Earth-616 Brooklyn Waterfront — 1d ago",
+    accent: "#d97706",
+    icon: "weather-dust",
+    bannerImage:
+      "https://www.theloadout.com/wp-content/sites/theloadout/2023/10/spider-man-2-ps5-villains-sandman-550x309.jpg",
+    portraitImage:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKIFN-dCCkkKmg5M00d8bPfRRgPaTk0pBb7w&s",
+    statusTag: "Dispersing",
+    description:
+      "Escaped convict Flint Marko stumbled into a particle physics test site and had his body fused at a molecular level with sand. Driven by love for his dying daughter rather than pure malice, Sandman occupies a moral grey zone. His mass integrity is deteriorating — each re-solidification takes longer and leaves him less coherent.",
+    abilities: [
+      "Full Sand Shapeshifting",
+      "Mass Dispersal & Reformation",
+      "Near-Physical Invulnerability",
+      "Giant Sand Construct Combat",
+      "Particle Density Control",
+    ],
+    crossEarthSightings: [
+      { earth: "Earth-96283", status: "Origin", accent: "#d97706" },
+      {
+        earth: "Earth-616",
+        status: "Unstable — Dispersing",
+        accent: "#ef4444",
+      },
+      { earth: "Earth-199999", status: "Signal Faint", accent: "#6b7280" },
+    ],
+  },
+  {
+    id: "v7",
+    name: "Mysterio",
+    earth: "Earth-199999",
+    realName: "Quentin Beck",
+    threatLevel: "HIGH",
+    status: "Deceased",
+    lastSeen: "Tower Bridge, London — Final Incident",
+    accent: "#06b6d4",
+    icon: "eye-circle-outline",
+    bannerImage:
+      "https://hips.hearstapps.com/hmg-prod/images/jake-gyllenhaal-spiderman-far-from-home-1547562915.jpg?crop=1xw:1xh;center,top&resize=980:*",
+    portraitImage:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrus5cy9qQc9kfMd-kyWAJhUVDz_My6fw4Gw&s",
+    statusTag: "Legacy Threat",
+    description:
+      "Former Stark Industries holographic engineer Quentin Beck weaponised drone swarms to stage fake Elemental attacks across Europe, positioning himself as Earth's new hero. He exposed Peter Parker's identity to the world before dying from his own deflected blaster. His pre-recorded media package continues to be a live global threat.",
+    abilities: [
+      "E.D.I.T.H. Drone Swarms",
+      "BARF Holographic Projection",
+      "Master-Level Tactical Deception",
+      "Elemental Illusion Fabrication",
+      "Neural Sensory Disruption",
+    ],
+    crossEarthSightings: [
+      { earth: "Earth-199999", status: "Deceased", accent: "#6b7280" },
+      { earth: "Earth-616", status: "Identity Leak Active", accent: "#ef4444" },
+      { earth: "Earth-833", status: "Variant Unconfirmed", accent: "#06b6d4" },
+    ],
+  },
+  {
+    id: "v8",
+    name: "Vulture",
+    earth: "Earth-199999",
+    realName: "Adrian Toomes",
+    threatLevel: "HIGH",
+    status: "Escaped",
+    lastSeen: "Cross-Dimensional Prison Transport — Signal Lost",
+    accent: "#64748b",
+    icon: "feather",
+    bannerImage:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMPmYNkQn6EmvuXRiu7ZQaC9tLZFtBwKIXKw&s",
+    portraitImage:
+      "https://pyxis.nymag.com/v1/imgs/f66/e87/d8f85141e0171cebe0bbbfb749ab0be8f4-05-keaton-spiderman-2.rsquare.w400.jpg",
+    statusTag: "Prison Break",
+    description:
+      "Salvage contractor Adrian Toomes was wiped out by Stark Industries after the Chitauri invasion and turned to the black market — retrofitting alien tech into weapons for crime. His Chitauri-alloy wing suit makes him lethal in aerial combat. He escaped during a cross-dimensional prison transfer failure. Location currently unknown.",
+    abilities: [
+      "Chitauri-Alloy Wing Suit",
+      "Salvaged Alien Tech Arsenal",
+      "Elite Aerial Combat",
+      "Anti-Gravity Boosted Flight",
+      "Underground Arms Network",
+    ],
+    crossEarthSightings: [
+      { earth: "Earth-199999", status: "Origin", accent: "#64748b" },
+      { earth: "Earth-928", status: "Variant Detained", accent: "#22c55e" },
+      { earth: "Earth-80920", status: "Escaped", accent: "#ef4444" },
+    ],
+  },
+  {
+    id: "v9",
+    name: "Kingpin",
+    earth: "Earth-1610",
+    realName: "Wilson Fisk",
+    threatLevel: "CRITICAL",
+    status: "Active",
+    lastSeen: "Earth-1610 NYC Fisk Tower — 8h ago",
+    accent: "#f43f5e",
+    icon: "crown-outline",
+    bannerImage:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIGzxKC4r5DHmlK34QLXXaDDyvAkxdLxYWuw&s",
+    portraitImage:
+      "https://static.wikia.nocookie.net/villains/images/6/62/Kingpin_TAS_Profile_Image_2.png/revision/latest/thumbnail/width/360/height/360?cb=20200213054249",
+    statusTag: "Running Operations",
+    description:
+      "Wilson Fisk built New York's most powerful criminal empire through ruthless intelligence and terrifying physical dominance. Obsessed with reclaiming a version of his lost family, he constructed a supercollider beneath Brooklyn that nearly fractured the multiverse. Still operating freely from Fisk Tower — politically shielded and untouchable.",
+    abilities: [
+      "Superhuman Physical Mass",
+      "Criminal Empire Command",
+      "Supercollider Tech Access",
+      "Political & Legal Immunity",
+      "Brutal Bare-Hands Combat",
+    ],
+    crossEarthSightings: [
+      { earth: "Earth-1610", status: "Active HQ", accent: "#ef4444" },
+      { earth: "Earth-616", status: "Variant Operating", accent: "#f97316" },
+      { earth: "Earth-199999", status: "Financial Links", accent: "#facc15" },
+      { earth: "Earth-TRN123", status: "Collider Breach", accent: "#a855f7" },
+    ],
+  },
+  {
+    id: "v10",
+    name: "Carnage",
+    earth: "Earth-TRN700",
+    realName: "Cletus Kasady",
+    threatLevel: "CRITICAL",
+    status: "Active",
+    lastSeen: "Earth-TRN700 Ravencroft — 12h ago",
+    accent: "#ef4444",
+    icon: "skull-crossbones-outline",
+    bannerImage:
+      "https://static0.cbrimages.com/wordpress/wp-content/uploads/2020/01/Carnage-Venom.jpg",
+    portraitImage:
+      "https://i.pinimg.com/736x/97/f4/18/97f4182a31b530285e8e5f9c886419db.jpg",
+    statusTag: "Apex Predator",
+    description:
+      "Serial killer Cletus Kasady received a blood transfusion of Eddie Brock's symbiote-laced blood, bonding with an offspring of Venom at a cellular level. Unlike Venom, Carnage has no moral conflict — only an insatiable hunger to kill. Kasady's symbiote is immune to the sonic and flame weaknesses that limit other Klyntar, making standard containment protocols useless.",
+    abilities: [
+      "Blood-Bonded Symbiote (Unbreakable)",
+      "Sonic & Flame Resistance",
+      "Tendril Blade Generation",
+      "Psychotic Combat Instinct",
+      "Rapid Full-Body Mutation",
+    ],
+    crossEarthSightings: [
+      { earth: "Earth-TRN700", status: "Active — Escaped", accent: "#ef4444" },
+      { earth: "Earth-616", status: "Variant Incarcerated", accent: "#f97316" },
+      { earth: "Earth-1610", status: "Symbiote Echo", accent: "#a855f7" },
+    ],
+  },
+];
 
 const EARTH_STATUS_DATA: EarthStatus[] = [
   {
@@ -130,10 +459,256 @@ const TAG_COLORS: Record<string, { bg: string; text: string }> = {
   Containment: { bg: "#a855f722", text: "#a855f7" },
 };
 
+const VILLAIN_STATUS_COLORS: Record<
+  string,
+  { bg: string; text: string; dot: string }
+> = {
+  "At Large": { bg: "#ef444422", text: "#ef4444", dot: "#ef4444" },
+  Contained: { bg: "#22c55e22", text: "#22c55e", dot: "#22c55e" },
+  Active: { bg: "#f9731622", text: "#f97316", dot: "#f97316" },
+  Monitoring: { bg: "#facc1522", text: "#facc15", dot: "#facc15" },
+  Neutralised: { bg: "#3b82f622", text: "#3b82f6", dot: "#3b82f6" },
+  Destroyed: { bg: "#6b728022", text: "#9ca3af", dot: "#6b7280" },
+  Compromised: { bg: "#818cf822", text: "#818cf8", dot: "#818cf8" },
+  Deceased: { bg: "#6b728022", text: "#9ca3af", dot: "#6b7280" },
+  Escaped: { bg: "#ef444433", text: "#fca5a5", dot: "#ef4444" },
+  Unstable: { bg: "#d9770622", text: "#d97706", dot: "#d97706" },
+};
+
+const THREAT_COLORS: Record<string, string> = {
+  CRITICAL: "#ef4444",
+  HIGH: "#f97316",
+  MEDIUM: "#facc15",
+  LOW: "#22c55e",
+};
+
 const SpiderHQScreen = () => {
   const { theme } = useAppTheme();
   const isDark = theme.mode === "dark";
   const styles = createStyles(theme);
+
+  const renderVillainCard = (villain: VillainStatus) => {
+    const statusColor = VILLAIN_STATUS_COLORS[villain.status] ?? {
+      bg: villain.accent + "22",
+      text: villain.accent,
+      dot: villain.accent,
+    };
+    const threatColor = THREAT_COLORS[villain.threatLevel] ?? "#9ca3af";
+
+    return (
+      <View
+        key={villain.id}
+        style={[styles.villainCard, { borderColor: threatColor + "55" }]}
+      >
+        <View style={styles.villainBannerWrap}>
+          <Image
+            source={{ uri: villain.bannerImage }}
+            style={styles.villainBannerImage}
+            resizeMode="cover"
+          />
+
+          <View style={styles.villainBannerGradient} />
+
+          <View
+            style={[
+              styles.villainBannerAccent,
+              { backgroundColor: threatColor + "30" },
+            ]}
+          />
+
+          <View
+            style={[
+              styles.threatBadge,
+              { backgroundColor: threatColor + "ee" },
+            ]}
+          >
+            <MaterialCommunityIcons
+              name="alert-octagon"
+              size={10}
+              color="#fff"
+            />
+            <Text style={styles.threatBadgeText}>{villain.threatLevel}</Text>
+          </View>
+
+          <View
+            style={[styles.villainStatusPill, { backgroundColor: "#000000bb" }]}
+          >
+            <View
+              style={[styles.villainDot, { backgroundColor: statusColor.dot }]}
+            />
+            <Text
+              style={[
+                styles.villainStatusPillText,
+                { color: statusColor.text },
+              ]}
+            >
+              {villain.status}
+            </Text>
+          </View>
+
+          <View
+            style={[styles.villainPortraitRing, { borderColor: threatColor }]}
+          >
+            <Image
+              source={{ uri: villain.portraitImage }}
+              style={styles.villainPortrait}
+              resizeMode="cover"
+            />
+          </View>
+        </View>
+
+        <View style={styles.villainCardBody}>
+          <View style={styles.villainNameRow}>
+            <View style={styles.villainNameBlock}>
+              <Text style={styles.villainName}>{villain.name}</Text>
+              <Text style={styles.villainRealName}>{villain.realName}</Text>
+            </View>
+            <View style={styles.villainMetaRight}>
+              <View
+                style={[
+                  styles.villainIconWrap,
+                  { backgroundColor: threatColor + "22" },
+                ]}
+              >
+                <MaterialCommunityIcons
+                  name={villain.icon}
+                  size={18}
+                  color={threatColor}
+                />
+              </View>
+              <View
+                style={[
+                  styles.villainEarthBadge,
+                  { backgroundColor: isDark ? "#ffffff12" : "#00000010" },
+                ]}
+              >
+                <Text style={styles.villainEarthText}>{villain.earth}</Text>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.lastSeenRow}>
+            <MaterialCommunityIcons
+              name="clock-outline"
+              size={13}
+              color={isDark ? "#9e8fbe" : "#8a7898"}
+            />
+            <Text style={styles.lastSeenText}>{villain.lastSeen}</Text>
+          </View>
+
+          <Text style={styles.villainDescription}>{villain.description}</Text>
+
+          <View
+            style={[
+              styles.abilitiesBox,
+              {
+                borderColor: threatColor + "33",
+                backgroundColor: isDark
+                  ? threatColor + "0d"
+                  : threatColor + "08",
+              },
+            ]}
+          >
+            <View style={styles.abilitiesHeader}>
+              <MaterialCommunityIcons
+                name="dna"
+                size={13}
+                color={threatColor}
+              />
+              <Text style={[styles.abilitiesTitle, { color: threatColor }]}>
+                Known Abilities
+              </Text>
+              <View
+                style={[
+                  styles.statusTagPill,
+                  { backgroundColor: statusColor.bg },
+                ]}
+              >
+                <Text
+                  style={[styles.statusTagText, { color: statusColor.text }]}
+                >
+                  {villain.statusTag}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.abilitiesWrap}>
+              {villain.abilities.map((ability, idx) => (
+                <View
+                  key={idx}
+                  style={[
+                    styles.abilityPill,
+                    { backgroundColor: threatColor + "18" },
+                  ]}
+                >
+                  <View
+                    style={[
+                      styles.abilityDot,
+                      { backgroundColor: threatColor },
+                    ]}
+                  />
+                  <Text
+                    style={[
+                      styles.abilityText,
+                      { color: isDark ? "#e2d5f8" : "#3a2f52" },
+                    ]}
+                  >
+                    {ability}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          </View>
+
+          <View
+            style={[
+              styles.crossEarthBox,
+              {
+                borderColor: isDark ? "#ffffff10" : "#00000010",
+                backgroundColor: isDark ? "#ffffff06" : "#00000005",
+              },
+            ]}
+          >
+            <View style={styles.crossEarthHeader}>
+              <MaterialCommunityIcons
+                name="earth"
+                size={13}
+                color={isDark ? "#9e8fbe" : "#8a7898"}
+              />
+              <Text style={styles.crossEarthTitle}>Cross-Earth Sightings</Text>
+            </View>
+            <View style={styles.crossEarthList}>
+              {villain.crossEarthSightings.map((sighting, idx) => (
+                <View key={idx} style={styles.crossEarthRow}>
+                  <View
+                    style={[
+                      styles.crossEarthDot,
+                      { backgroundColor: sighting.accent },
+                    ]}
+                  />
+                  <Text style={styles.crossEarthName}>{sighting.earth}</Text>
+                  <View
+                    style={[
+                      styles.crossEarthStatusPill,
+                      { backgroundColor: sighting.accent + "20" },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.crossEarthStatusText,
+                        { color: sighting.accent },
+                      ]}
+                    >
+                      {sighting.status}
+                    </Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+          </View>
+        </View>
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -150,7 +725,7 @@ const SpiderHQScreen = () => {
                   <Text style={styles.eyebrow}>Mission Control</Text>
                   <Text style={styles.title}>Spider HQ</Text>
                   <Text style={styles.headerSubtitle}>
-                    Live status across all tracked dimensions.
+                    Villains and Live status across all tracked dimensions.
                   </Text>
                 </View>
                 <ThemeToggleButton iconVariant="gwen-theme" />
@@ -171,6 +746,77 @@ const SpiderHQScreen = () => {
                 </View>
               </View>
             </View>
+          </View>
+        }
+        ListFooterComponent={
+          <View style={styles.villainSection}>
+            <View style={styles.villainSectionHeader}>
+              <View style={styles.villainSectionTitleRow}>
+                <View style={styles.villainSectionIconWrap}>
+                  <MaterialCommunityIcons
+                    name="biohazard"
+                    size={20}
+                    color="#f43f5e"
+                  />
+                </View>
+                <View style={styles.villainSectionTextWrap}>
+                  <Text style={styles.villainSectionEyebrow}>
+                    Threat Intelligence
+                  </Text>
+                  <Text style={styles.villainSectionTitle}>
+                    Villain Status Board
+                  </Text>
+                </View>
+              </View>
+              <Text style={styles.villainSectionSubtitle}>
+                Tracking 10 known Spider-Man threats across all monitored
+                dimensions. Last sync: 12 min ago.
+              </Text>
+
+              <View style={styles.villainStatsRow}>
+                <View
+                  style={[
+                    styles.villainStatChip,
+                    { backgroundColor: "#ef444422" },
+                  ]}
+                >
+                  <View
+                    style={[styles.statDot, { backgroundColor: "#ef4444" }]}
+                  />
+                  <Text style={[styles.statChipText, { color: "#ef4444" }]}>
+                    4 Critical
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    styles.villainStatChip,
+                    { backgroundColor: "#f9731622" },
+                  ]}
+                >
+                  <View
+                    style={[styles.statDot, { backgroundColor: "#f97316" }]}
+                  />
+                  <Text style={[styles.statChipText, { color: "#f97316" }]}>
+                    5 High
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    styles.villainStatChip,
+                    { backgroundColor: "#facc1522" },
+                  ]}
+                >
+                  <View
+                    style={[styles.statDot, { backgroundColor: "#facc15" }]}
+                  />
+                  <Text style={[styles.statChipText, { color: "#facc15" }]}>
+                    1 Medium
+                  </Text>
+                </View>
+              </View>
+            </View>
+
+            {VILLAIN_DATA.map((villain) => renderVillainCard(villain))}
           </View>
         }
         renderItem={({ item }) => {
@@ -555,7 +1201,6 @@ const createStyles = (theme: ReturnType<typeof useAppTheme>["theme"]) => {
       lineHeight: 19,
     },
 
-    // Footer row
     footerRow: {
       flexDirection: "row",
       alignItems: "center",
@@ -572,6 +1217,381 @@ const createStyles = (theme: ReturnType<typeof useAppTheme>["theme"]) => {
     footerLevel: {
       fontSize: 13,
       fontWeight: "900",
+    },
+
+    villainSection: {
+      gap: 14,
+      marginTop: 8,
+    },
+
+    villainSectionHeader: {
+      backgroundColor: isDark ? "#1a0a14" : "#2a0d1a",
+      borderRadius: 24,
+      padding: 20,
+      borderWidth: 1,
+      borderColor: isDark ? "#7f1d3a" : "#6b1630",
+      gap: 14,
+    },
+
+    villainSectionTitleRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 12,
+    },
+
+    villainSectionIconWrap: {
+      width: 44,
+      height: 44,
+      borderRadius: 22,
+      backgroundColor: "#f43f5e22",
+      alignItems: "center",
+      justifyContent: "center",
+      borderWidth: 1,
+      borderColor: "#f43f5e44",
+    },
+
+    villainSectionTextWrap: { flex: 1 },
+
+    villainSectionEyebrow: {
+      color: "#f43f5e",
+      fontSize: 11,
+      fontWeight: "800",
+      textTransform: "uppercase",
+      letterSpacing: 1.2,
+      marginBottom: 3,
+    },
+
+    villainSectionTitle: {
+      color: "#ffffff",
+      fontSize: 20,
+      fontWeight: "900",
+      letterSpacing: 0.2,
+    },
+
+    villainSectionSubtitle: {
+      color: "#e0aaba",
+      fontSize: 12,
+      lineHeight: 18,
+    },
+
+    villainStatsRow: {
+      flexDirection: "row",
+      gap: 8,
+      flexWrap: "wrap",
+    },
+
+    villainStatChip: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 6,
+      borderRadius: 999,
+      paddingHorizontal: 12,
+      paddingVertical: 6,
+    },
+
+    statDot: {
+      width: 6,
+      height: 6,
+      borderRadius: 3,
+    },
+
+    statChipText: {
+      fontSize: 11,
+      fontWeight: "900",
+      textTransform: "uppercase",
+      letterSpacing: 0.5,
+    },
+
+    // Villain Cards
+    villainCard: {
+      borderRadius: 22,
+      borderWidth: 1.5,
+      overflow: "hidden",
+      backgroundColor: isDark ? "#130a12" : "#ffffff",
+      shadowColor: "#1a0008",
+      shadowOpacity: isDark ? 0 : 0.1,
+      shadowRadius: 14,
+      shadowOffset: { width: 0, height: 5 },
+      elevation: isDark ? 0 : 3,
+    },
+
+    villainBannerWrap: {
+      width: "100%",
+      height: 160,
+      position: "relative",
+    },
+
+    villainBannerImage: {
+      width: "100%",
+      height: "100%",
+    },
+
+    villainBannerGradient: {
+      ...StyleSheet.absoluteFillObject,
+      backgroundColor: "rgba(0,0,0,0.45)",
+    },
+
+    villainBannerAccent: {
+      ...StyleSheet.absoluteFillObject,
+    },
+
+    threatBadge: {
+      position: "absolute",
+      top: 10,
+      left: 12,
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 5,
+      borderRadius: 8,
+      paddingHorizontal: 9,
+      paddingVertical: 5,
+    },
+
+    threatBadgeText: {
+      color: "#ffffff",
+      fontSize: 10,
+      fontWeight: "900",
+      textTransform: "uppercase" as const,
+      letterSpacing: 0.8,
+    },
+
+    villainStatusPill: {
+      position: "absolute",
+      top: 10,
+      right: 12,
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 6,
+      borderRadius: 999,
+      paddingHorizontal: 11,
+      paddingVertical: 5,
+    },
+
+    villainDot: {
+      width: 6,
+      height: 6,
+      borderRadius: 3,
+    },
+
+    villainStatusPillText: {
+      fontSize: 11,
+      fontWeight: "900",
+    },
+
+    // Portrait circle overlapping banner bottom
+    villainPortraitRing: {
+      position: "absolute",
+      bottom: -28,
+      left: 16,
+      width: 62,
+      height: 62,
+      borderRadius: 31,
+      borderWidth: 3,
+      overflow: "hidden",
+      backgroundColor: "#1a0a12",
+    },
+
+    villainPortrait: {
+      width: "100%",
+      height: "100%",
+    },
+
+    villainCardBody: {
+      paddingTop: 38, // leaves room for the portrait overlap
+      paddingHorizontal: 16,
+      paddingBottom: 16,
+      gap: 10,
+    },
+
+    // Name row sits beside portrait space
+    villainNameRow: {
+      flexDirection: "row",
+      alignItems: "flex-start",
+      gap: 10,
+    },
+
+    villainNameBlock: {
+      flex: 1,
+      paddingLeft: 78, // offset for portrait width + gap
+    },
+
+    villainMetaRight: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 8,
+    },
+
+    villainCardHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 12,
+    },
+
+    villainIconWrap: {
+      width: 36,
+      height: 36,
+      borderRadius: 18,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+
+    villainHeaderText: { flex: 1 },
+
+    villainName: {
+      color: isDark ? "#ffe4ee" : "#1a0010",
+      fontSize: 17,
+      fontWeight: "900",
+    },
+
+    villainRealName: {
+      color: isDark ? "#c49aaa" : "#6a3848",
+      fontSize: 12,
+      marginTop: 2,
+    },
+
+    villainEarthBadge: {
+      borderRadius: 10,
+      paddingHorizontal: 10,
+      paddingVertical: 6,
+    },
+
+    villainEarthText: {
+      color: isDark ? "#e0d0dc" : "#3a1a28",
+      fontSize: 11,
+      fontWeight: "800",
+    },
+
+    lastSeenRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 6,
+    },
+
+    lastSeenText: {
+      color: isDark ? "#b8a0b0" : "#7a5a68",
+      fontSize: 12,
+      fontWeight: "600",
+    },
+
+    villainDescription: {
+      color: isDark ? "#d4c0cc" : "#584050",
+      fontSize: 13,
+      lineHeight: 20,
+    },
+
+    abilitiesBox: {
+      borderRadius: 14,
+      borderWidth: 1,
+      padding: 13,
+      gap: 10,
+    },
+
+    abilitiesHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 7,
+    },
+
+    abilitiesTitle: {
+      flex: 1,
+      fontSize: 13,
+      fontWeight: "900",
+      letterSpacing: 0.3,
+    },
+
+    statusTagPill: {
+      borderRadius: 999,
+      paddingHorizontal: 10,
+      paddingVertical: 4,
+    },
+
+    statusTagText: {
+      fontSize: 10,
+      fontWeight: "900",
+      textTransform: "uppercase",
+      letterSpacing: 0.5,
+    },
+
+    abilitiesWrap: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      gap: 8,
+    },
+
+    abilityPill: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 6,
+      borderRadius: 999,
+      paddingHorizontal: 11,
+      paddingVertical: 5,
+    },
+
+    abilityDot: {
+      width: 5,
+      height: 5,
+      borderRadius: 3,
+    },
+
+    abilityText: {
+      fontSize: 12,
+      fontWeight: "700",
+    },
+
+    // Cross-earth sightings
+    crossEarthBox: {
+      borderRadius: 14,
+      borderWidth: 1,
+      padding: 13,
+      gap: 10,
+    },
+
+    crossEarthHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 7,
+    },
+
+    crossEarthTitle: {
+      color: isDark ? "#9e8fbe" : "#8a7898",
+      fontSize: 12,
+      fontWeight: "800",
+      textTransform: "uppercase",
+      letterSpacing: 0.6,
+    },
+
+    crossEarthList: {
+      gap: 8,
+    },
+
+    crossEarthRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 10,
+    },
+
+    crossEarthDot: {
+      width: 8,
+      height: 8,
+      borderRadius: 4,
+    },
+
+    crossEarthName: {
+      flex: 1,
+      color: isDark ? "#e0d0dc" : "#3a2840",
+      fontSize: 13,
+      fontWeight: "700",
+    },
+
+    crossEarthStatusPill: {
+      borderRadius: 999,
+      paddingHorizontal: 10,
+      paddingVertical: 4,
+    },
+
+    crossEarthStatusText: {
+      fontSize: 11,
+      fontWeight: "800",
     },
   });
 };
